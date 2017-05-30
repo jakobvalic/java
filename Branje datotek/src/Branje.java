@@ -50,22 +50,20 @@ public class Branje {
 			String vrstica = vhod.readLine().trim();
 			if (vrstica.equals(""))
 				continue;
-			String[] besede = vrstica.split(" +"); // " +" odstrani presledke // KAKO ODSTRANITI VEJICE IN PIKE??
-			for (String beseda : besede) {
-				char zadnjiZnak = beseda.charAt(beseda.length()-1); // Preverimo, ali je treba zadnji znak odstraniti
-				if ("?!.,;\"".contains("" + zadnjiZnak)) 
-					beseda = beseda.substring(0, beseda.length()-1);
+			StringTokenizer st = new StringTokenizer(vrstica, " ?!.,;\"");
+			while (st.hasMoreTokens()) {
+				++stevecVseh;
+				String beseda = st.nextToken();
 				// Èe ni vsebovana v množici besed, ki jih ne štejemo, jo dodamo v slovar
 				if (!nesteteBesede.contains(beseda)) {
-					int stevec = 1; // ALI OBSTAJA KAKŠNA METODA GET(BESEDA, 0) KOT V .PY?
-					if (besedisce.containsKey(beseda))
-						++stevec;
-					besedisce.put(beseda, stevec);
+					Integer vrednost = besedisce.get(beseda);
+					if (vrednost == null)
+						vrednost = 0;
+					besedisce.put(beseda, vrednost);
 				} else {
 					++stIzkljucenih;
 				}
 			}
-			stevecVseh += besede.length; 
 		}
 		System.out.println("Število vseh besed: " + stevecVseh);
 		System.out.println("Število izkljuèenih besed: " + stIzkljucenih);
