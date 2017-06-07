@@ -9,7 +9,7 @@ import org.apache.http.entity.ContentType;
 
 public class Prenos {
 
-	public static void main(String[] args) {
+/*	public static void main(String[] args) {
 		prijava("Mare");
 		prijava("Sovica Oka");
 		System.out.println(uporabniki());
@@ -21,6 +21,9 @@ public class Prenos {
 		odjava("Mare");
 		uporabniki();
 		
+	}*/
+	
+	public static void main(String[] args) {
 	}
 	
 	
@@ -50,56 +53,36 @@ public class Prenos {
 	}
 	
 	
-	public static void prijava(String uporabnik) {
-		try {
-			URI uri = new URIBuilder("http://chitchat.andrej.com/users")
-					.addParameter("username", uporabnik)
-					.build();
-			
-			String responseBody;
-			responseBody = Request.Post(uri)
-					.execute()
-					.returnContent()
-					.asString();
-			
-			System.out.println(responseBody);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			System.out.println("Uporabnik je že prijavljen.");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void prijava(String uporabnik) throws Exception {
+		URI uri = new URIBuilder("http://chitchat.andrej.com/users")
+				.addParameter("username", uporabnik)
+				.build();
+		
+		String responseBody;
+		responseBody = Request.Post(uri)
+				.execute()
+				.returnContent()
+				.asString();
+		
+		System.out.println(responseBody);
 	}
 	
-	public static void odjava(String uporabnik) {
-		URI uri;
-		try {
-			uri = new URIBuilder("http://chitchat.andrej.com/users")
-					.addParameter("username", uporabnik)
-					.build();
-			String responseBody = Request.Delete(uri)
-					.execute()
-					.returnContent()
-					.asString();
-			System.out.println(responseBody);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	public static void odjava(String uporabnik) throws Exception {
+	URI uri;
+		uri = new URIBuilder("http://chitchat.andrej.com/users")
+				.addParameter("username", uporabnik)
+				.build();
+		String responseBody = Request.Delete(uri)
+				.execute()
+				.returnContent()
+				.asString();
+		System.out.println(responseBody);
+	}
+	
+	
+	
+	public static void posljiVsem(String uporabnik, String sporocilo) throws Exception {
 
-		
-	}
-	
-	
-	
-	public static void posljiVsem(String uporabnik, String sporocilo) {
-		try {
 			URI uri = new URIBuilder("http://chitchat.andrej.com/messages")
 					.addParameter("username", uporabnik)
 					.build();
@@ -110,12 +93,12 @@ public class Prenos {
 					.execute()
 					.returnContent()
 					.asString();
+			
+			System.out.println(responseBody);
 			// Pošlje tudi samemu sebi
 			posljiEnemu(uporabnik, uporabnik, sporocilo);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+
 	}
 	
 	public static void posljiEnemu(String uporabnik, String naslovnik, String sporocilo) {
@@ -130,6 +113,7 @@ public class Prenos {
 					.execute()
 					.returnContent()
 					.asString();
+			System.out.println(responseBody);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,7 +121,7 @@ public class Prenos {
 	}
 	
 	
-	public static void prejmi(String uporabnik) {
+	public static String prejmi(String uporabnik) {
 		try {
 			URI uri = new URIBuilder("http://chitchat.andrej.com/messages")
 					.addParameter("username", uporabnik)
@@ -147,9 +131,11 @@ public class Prenos {
 					.returnContent()
 					.asString();
 			System.out.println(responseBody);
+			return responseBody;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "";
 		
 	}
 
