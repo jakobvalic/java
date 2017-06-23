@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class ChatFrame extends JFrame implements ActionListener, KeyListener {
+public class ChatFrame extends JFrame implements ActionListener, KeyListener, WindowListener {
 	
 	private JTextArea output;
 	private JTextField input;
@@ -166,4 +167,56 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		input.setEnabled(false);
+		try {
+			Prenos.odjava(vzdevek.getText());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		robot.deactivate();
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		if (e.getSource() == this) {
+			System.out.println("Zapiramo okno. Odjavljamo uporabnika. Ustavimo izpisovalnega robota.");
+		}
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		System.out.println("Zapiramo okno.");
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		System.out.println("zmanjšali");
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("Živjo!");
+	}
+		
+	
+	
+	
 }
