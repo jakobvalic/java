@@ -9,7 +9,7 @@ import org.apache.http.entity.ContentType;
 
 public class Prenos {
 
-/*	public static void main(String[] args) {
+/*	public static void main(String[] args) throws Exception {
 		prijava("Mare");
 		prijava("Sovica Oka");
 		System.out.println(uporabniki());
@@ -23,8 +23,6 @@ public class Prenos {
 		
 	}*/
 	
-	public static void main(String[] args) {
-	}
 	
 	
 	public static String prenesiStran (String spletnaStran) {

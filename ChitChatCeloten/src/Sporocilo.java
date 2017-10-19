@@ -11,6 +11,7 @@ public class Sporocilo {
 	private String tekst;
 	private Date poslanoOb;
 	
+	@SuppressWarnings("unused") // Rabi ga jackson.
 	private Sporocilo() { }
 	
 	/**
@@ -67,11 +68,11 @@ public class Sporocilo {
 	}
 	
 
-	@JsonProperty("last_active")
+	@JsonProperty("sent_at")
 	public Date getLastActive() {
 		return this.poslanoOb;
 	}
-
+	
 	public void setLastActive(Date lastActive) {
 		this.poslanoOb = lastActive;
 	}

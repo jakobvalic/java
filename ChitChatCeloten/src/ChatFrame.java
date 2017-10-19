@@ -92,7 +92,7 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener, Wi
 		        input.requestFocus();
 		    }
 		});
-		input.setEnabled(false);
+		input.setEnabled(true);
 		
 		this.inputKomu = new JTextField(10);
 		GridBagConstraints inputConstraint2 = new GridBagConstraints();
@@ -105,6 +105,8 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener, Wi
 		
 		// Naredimo robota za izpisovanje
 		this.robot = new IzpisovalniRobot(this);
+		robot.activate();
+		
 	}
 
 	/**
@@ -112,8 +114,17 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener, Wi
 	 * @param message - the message content
 	 */
 	public void addMessage(String person, String message) {
-		String chat = this.output.getText();
-		this.output.setText(chat + person + ": " + message + "\n");
+		String chat = output.getText();
+		output.setText(chat + person + ": " + message + "\n");
+	}
+	
+	public void posljiStrezniku(String person, String message) throws Exception {
+		if (inputKomu.getText() == "") {
+			Prenos.posljiVsem(person, message);
+		}
+		else {
+			Prenos.posljiEnemu(person, input.getText(), message);
+		}
 	}
 	
 	@Override
@@ -123,6 +134,7 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener, Wi
 				Prenos.prijava(vzdevek.getText());
 				input.setEnabled(true); // Sedaj lahko tipkamo
 				robot.activate();
+				
 			}
 			catch (Exception error){
 				System.out.println("Pojavila se je napaka, uporabnik je že prijavljen.");
@@ -144,14 +156,20 @@ public class ChatFrame extends JFrame implements ActionListener, KeyListener, Wi
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if (e.getSource() == this.input) {
+		if (e.getSource() == input) {
 			if (e.getKeyChar() == '\n') {
 				if(vzdevek.getText().equals("")){
-					this.vzdevek.setText(System.getProperty("user.name"));
+					vzdevek.setText(System.getProperty("user.name"));
 				}
 			javniVzdevek = vzdevek.getText();	
-			this.addMessage(this.vzdevek.getText(), this.input.getText());
-			this.input.setText("");
+			this.addMessage(vzdevek.getText(), input.getText());
+			try {
+				posljiStrezniku(vzdevek.getText(), input.getText());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			input.setText("");
 			}
 		}		
 	}

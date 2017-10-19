@@ -13,11 +13,11 @@ import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 public class IzpisovalniRobot extends TimerTask {
 	private ChatFrame chat;
 	private Timer timer;
+	private int i;
 	
 
 	public IzpisovalniRobot(ChatFrame chat) {
 		this.chat = chat;
-		
 	}
 
 	/**
@@ -34,6 +34,15 @@ public class IzpisovalniRobot extends TimerTask {
 	
 	@Override
 	public void run(){ 
+		// Za preverjanje si vsakiè pošljemo pozdrav
+/*		try {
+			if (i % 5 == 0) {
+			Prenos.posljiVsem(chat.vzdevek.getText(), "Živjo, dihur!");
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} */
 		String prejeto = Prenos.prejmi(chat.vzdevek.getText());
 		
 		
@@ -41,8 +50,22 @@ public class IzpisovalniRobot extends TimerTask {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDateFormat(new ISO8601DateFormat());
 
-		try {	
+		try {
 			
+			// Iz JSON-a v seznam sporoèil
+			
+			TypeReference<List<Sporocilo>> s = new TypeReference<List<Sporocilo>>() { };
+			List<Sporocilo> prejetaSporocila = mapper.readValue(prejeto, s);
+			
+			if (prejetaSporocila.size() > 0) {
+				for (int i = 0; i < prejetaSporocila.size(); i++) {
+					Sporocilo trenutnoSporocilo = prejetaSporocila.get(i);
+					chat.addMessage(trenutnoSporocilo.getPosiljatelj(), trenutnoSporocilo.getText());
+				}
+
+			}
+			
+			/**
 			// En uporabnik v JSON
 			Uporabnik asistent = new Uporabnik("aljaz", new Date());
 			Uporabnik asistentFiz = new Uporabnik("Gregor", new Date());
@@ -74,6 +97,7 @@ public class IzpisovalniRobot extends TimerTask {
 			String jsonSporocilo;
 			jsonSporocilo = mapper.writeValueAsString(sporocilo);
 			System.out.println(jsonSporocilo);
+			**/
 
 		} catch (IOException e) {
 			e.printStackTrace();
